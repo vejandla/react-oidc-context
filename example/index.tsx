@@ -1,8 +1,8 @@
-import { AccessTokenEvents } from "oidc-client-ts";
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
-import { AuthProvider, useAuth } from "../src/.";
+import { AuthProvider, useAuth, hasAuthParams } from "../src/.";
 
 // username: akv.test@gmail.com
 // password: Password@1
@@ -14,6 +14,21 @@ const oidcConfig = {
 
 function App() {
     const auth = useAuth();
+    React.useEffect(() => {
+        if (
+            !hasAuthParams() &&
+            !auth.isAuthenticated &&
+            !auth.activeNavigator &&
+            !auth.isLoading
+        ) {
+            //capture the url user is trying to access?
+            window.sessionStorage.setItem(
+                "redirectTo",
+                `${location.pathname}${location.search}`,
+            );
+            auth.signinRedirect({ redirectMethod: "replace" });
+        }
+    }, [auth]);
 
     if (auth.isLoading) {
         return <div>Loading...</div>;
@@ -37,7 +52,7 @@ function App() {
         );
     }
 
-    return <button onClick={() => void auth.signinRedirect()}>Log in</button>;
+    return <></>;
 }
 
 ReactDOM.render(
