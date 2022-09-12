@@ -1,12 +1,15 @@
+import { AccessTokenEvents } from "oidc-client-ts";
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 
 import { AuthProvider, useAuth } from "../src/.";
 
+// username: akv.test@gmail.com
+// password: Password@1
 const oidcConfig = {
-    authority: "<your authority>",
-    client_id: "<your client id>",
-    redirect_uri: "<your redirect uri>",
+    authority: "https://dev-h749yi7d.us.auth0.com",
+    client_id: "jhKC0vFO1Qo6T9ZT0006yzAKJ0LzLblC",
+    redirect_uri: "http://localhost:7000",
 };
 
 function App() {
@@ -24,6 +27,9 @@ function App() {
         return (
             <div>
                 Hello {auth.user?.profile.sub}{" "}
+                <button onClick={() => void auth.signinSilent()}>
+                    SigninSilent
+                </button>
                 <button onClick={() => void auth.removeUser()}>
                     Log out
                 </button>
